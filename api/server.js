@@ -21,7 +21,8 @@ app.use(passport.session())
 app.use('/api' , routes)
 
 
+const PORT = process.env.PORT || 3001
 
 db.sync({force: false }).then(() => {
-    app.listen(3001 , () => console.log(`Listening on ${3001}`))
+    app.listen(PORT , () => console.log(`Listening on ${PORT}`))
 })
