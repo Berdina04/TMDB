@@ -1,47 +1,99 @@
-import axios from "axios";
-import React, { useContext } from "react";
-import { UserContext } from "..";
-
+import axios from 'axios'
+import React, { useContext } from 'react'
+import { UserContext } from '..'
+import { Link } from 'react-router-dom'
+import { use } from 'passport'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 
 const Card = ({ movie }) => {
+
     const { user } = useContext(UserContext)
+    const { setFavs } = useContext(UserContext)
+    const { setMovie } = useContext(UserContext)
+    const [validateButton, setValidateButton] = useState(false)
+
 
     const addFav = (e) => {
         e.preventDefault()
-       
         axios
             .post('/api/addFavorite', {
-                userId : user.id,
-                movie: movie.title
+                userId: user.id,
+                movieId : movie.id,
+                movie: movie,
+                isAdded: true
             })
+            .then(res => setFavs(res))
+            .then(() => setValidateButton(true))
+    }
+    const deleteFav = (e) => {
+        e.preventDefault()
+        axios
+            .delete(`/api/deleteFavorite/${user.id}/${movie.id} `)
+            .then(() => setValidateButton(false))
+            .then(() =>  {
+                setFavs()
+                movie.isAdded = false
+            } )
+            
+    }
+    const seeDetails = (movie) => {
+
+        axios
+            .get(`https://api.themoviedb.org/3/movie/${movie.id}/videos?api_key=dc9be762591d283643db6e62a4f3a11f`)
+            .then(video => movie.video = video)
+            .then(() => setMovie(movie))
 
     }
+    const isFavorite = () => {
+        console.log('estos son los estados' , movie.isAdded , validateButton)
+        if (movie.isAdded || validateButton) {
+            return (
+                <button onClick={deleteFav}
+                    className="button is-danger is-light is-medium is-rounded mb-2 is-4">Delete of favorites
+                </button>
+            )
+        }
+        else {
+            return (
+                <button onClick={addFav}
+                    className="button is-success is-light is-medium is-rounded mb-2 is-4">Add to favorites
+                </button>
+            )
+        }
+    }
+    useEffect(() => {
+        isFavorite
+
+    }, [validateButton])
+
+
+
 
     const img = 'https://image.tmdb.org/t/p/original/'
     return (
-        <div class=" card my-auto">
-            <div class="card-image">
-                <figure class="image is-4by4">
-                    <img src={img + movie.poster_path} alt="Placeholder image" />
-                </figure>
+
+        <div className="card middle">
+            <div className="front">
+                <img src={img + movie.poster_path} alt="Placeholder image" />
             </div>
-            <div class="card-content">
-                <div class="media">
+            <div className="back">
+                <div className="back-content middle">
+                    <p className="title ">{movie.title}</p>
+                    <time >{movie.release_date}</time>
+                    <div className='text-overview'>{movie.overview}</div>
+                    <br />
+                    <Link to='/details'>
+                        <button className="button is-warning is-light is-medium is-rounded mb-2 is-4" onClick={() => seeDetails(movie)}>
+                            Know More..
+                        </button>
+                    </Link>
+                    {
+                        user.id ? isFavorite() : null
+                        
+                    }
 
-                    <div class="media-content">
-                        <p class="title is-4">{movie.title}</p>
-                        {user.id ? <button onClick={addFav}
-                            class="button is-success is-light is-small is-rounded mb-2 is-4">Add to favorites</button> : null}
-                        <br />
-
-                        <time >{movie.release_date}</time>
-                    </div>
-                </div>
-
-                <div class="content">
-                    {movie.overview}
-                    <div></div>
 
                 </div>
             </div>
@@ -49,4 +101,4 @@ const Card = ({ movie }) => {
     )
 }
 
-export default Card;
+export default Card

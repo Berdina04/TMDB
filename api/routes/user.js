@@ -1,76 +1,83 @@
 const express = require('express')
-const router = express.Router();
+const router = express.Router()
 const User = require('../models/user')
-const Movie = require('../models/movie');
-const passport = require('passport')
-const localStrategy = require('passport-local');
+const Movie = require('../models/movie')
+const jwt = require('jsonwebtoken')
+const checkJWT = require('../middlewares/jwt')
 
-
-
-router.post('/signUp' , (req, res) => {
-    User.create(req.body)
-    .then(res.sendStatus(201))
-    .catch(err => console.log(err))
-})
-
-router.post('/logIn' , passport.authenticate('local'), (req, res) => {
-    res.send(req.user);
-})
-
-router.post('/addFavorite', (req,res) => {
-    Movie.create(req.body)
-    .then(res.sendStatus(201))
-   
-})
-
-router.get('/me' , (req,res)=> {
-    if(!req.user) res.sendStatus(401)
+router.get('/me', (req, res) => {
+    if (!req.user) res.sendStatus(401)
     res.send(req.user)
 })
 
-router.get('/addFavorite',(req,res)=> {
-    console.log('hola llegue a server')
+router.get('/addFavorites/:id', (req, res) => {
     
-    // Movie.getAll({where : {movie : req.body}})
-    // .then(res => console.log(res.data))
-    
+    Movie.findAll({ where: { userId: req.params.id } })
+        .then(movies => {
+            res.status(200).send(movies)
+        }) 
 })
 
+router.post('/register', (req, res , next) => {
+   
+    User.create(req.body)
+        .then(res.sendStatus(201))
+        .catch(err => console.log(err))
+})
 
-passport.use(
-    new localStrategy({
-        usernameField : 'email',
-        passwordField : 'password',
-    },
-    function (email, password,done){
-        User.findOne({where: {email}})
-        .then(user => {
-            if(!user) {
-                return done(null,false)
-            }
+router.post('/login', (req, res) => {
+    // check if the user is valid
+    console.dir(req.body)
+    const {email , password} = req.body
 
-            user.hash(password, user.salt)
-            .then(hash => {
-                if(hash !== user.password){
-                    return done(null, false)
-                }
+    //evaluate email
 
-                return done(null, user)
-            })
-            .catch(done)
-        })
+    User.findOne({
+        where: { 
+            email,
+        }
     })
-)
+    .then(user => {
+        if(!user) {
+            return res.status(400).send("user is not found")
+        }
 
-passport.serializeUser(function(user, done){
-    done(null, user.id)
+        if(!user.validPassword(password)){
+            console.log(password)
+            return res.status(401).send("invalid credentials")
+        }
+
+        //generate the token+
+        const token = jwt.sign({id: user.id , foo: "bar" , email: user.email}, 'plataforma5') //payload
+
+        return res.status(200).json({token})
+
+    })
+
 })
 
-passport.deserializeUser(function(id , done) {
-    User.findByPk(id)
-    .then(user => done(null, user))
-    .catch(done)
-    
+
+router.get('/private' , checkJWT , (req,res) => {
+    res.status(200).send('info privada')
 })
+
+
+router.post('/addFavorite', (req, res) => {
+    Movie.create(req.body)
+        .then(res.sendStatus(201))
+
+})
+
+router.delete('/deleteFavorite/:userId/:movieId' , (req, res) => {
+    console.log(req.params)
+    Movie.destroy({
+        where: {
+            movieId : req.params.movieId,
+            userId : req.params.userId
+        }
+    })
+    .then(res.sendStatus(202))
+})
+
 
 module.exports = router

@@ -1,27 +1,43 @@
-import axios from "axios";
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import Grid from '../components/Grid'
+import axios from 'axios'
+import React, { useContext, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { UserContext } from '../index'
-import { useNavigate } from "react-router";
+import { useNavigate } from 'react-router'
+import { useEffect } from 'react'
 
 const Navbar = () => {
-
-    const [value, setValue] = useState('');
-    const [moviesSearched, setMovieSearched] = useState([])
+    const [value, setValue] = useState('')
+    const { movies , setMovies } = useContext(UserContext)
     const navigate = useNavigate()
     const { user, setUser } = useContext(UserContext)
+    const { favMovie } = useContext(UserContext)
+
+
 
     const handleOnChange = (e) => {
         e.preventDefault()
-        setValue(e.target.value);
+
+        setValue(e.target.value)
+
+
+    }
+    
+    let moviesTemp
+
+    useEffect(() => {
+        console.log(value)
+        if (value !== '') moviesTemp = `https://api.themoviedb.org/3/search/movie?api_key=dc9be762591d283643db6e62a4f3a11f&query=${value}`
+
+        else moviesTemp = 'https://api.themoviedb.org/3/movie/popular?api_key=dc9be762591d283643db6e62a4f3a11f'
 
         axios
-            .get(`https://api.themoviedb.org/3/search/movie?api_key=dc9be762591d283643db6e62a4f3a11f&query=${value}`)
+            .get(moviesTemp)
             .then(res => res.data)
-            .then(moviesSearched => setMovieSearched(moviesSearched.results))
-    }
+            .then(moviesSearched => setMovies(moviesSearched.results)
+            )
+
+    }, [value])
+
 
     const handleLogout = (e) => {
         e.preventDefault()
@@ -31,85 +47,64 @@ const Navbar = () => {
             .then(navigate('/'))
     }
 
+
     return (
-        <div>
-            <div>
-                <nav class="navbar is-tab is-fixed-top is-spaced is-link my-auto navbar" role="navigation" aria-label="main navigation">
-                    <div class="navbar-brand">
-                        <a class="navbar-item">
-                            MovieCamp
-                        </a>
+        <div className='section'>
+            <nav>
+                <div className="logo"> Movie Brand</div>
+                <input type="checkbox" id="click" />
+                <label htmlFor="click" className="menu-btn">
+                    <i className="fas fa-bars"></i>
+                </label>
 
-                        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                            <span aria-hidden="true"></span>
-                        </a>
-                    </div>
+                <ul>
+                    <li> <input onChange={(e) => handleOnChange(e)} className="input " type="text" placeholder="Search Movie"></input></li>
+                    <li>
+                        <Link to='/'>
+                            <a >
+                                Home
+                            </a>
+                        </Link>
+                    </li>
 
-                    <div id="navbarBasicExample" class="navbar-menu">
-                        <div class="navbar-start">
-                            <Link to='/'>
-                                <a class="navbar-item ">
-                                    Home
+                    {user.id
+                        ?
+                        <> 
+                            <li>
+                                <Link to='/favs'>
+                                    <a>
+                                        Favorites
+                                    </a>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/">
+                                    <a onClick={handleLogout} >
+                                        <strong>Log Out</strong>
+                                    </a>
+                                </Link>
+                            </li>
+                        </>
+                        : <li>
+                            <Link to="signUp">
+                                <a >
+                                    <strong>Sign up</strong>
                                 </a>
                             </Link>
-                            <div class="navbar-item ">
-                            <Link to='/favs'>
-                                <a class="navbar-item">
-                                    Favorites
+                            <Link to="logIn">
+                                <a >
+                                    <strong>Log in</strong>
                                 </a>
                             </Link>
 
+                        </li>
+                    }
 
-
-                            </div>
-
-                            <input onChange={handleOnChange} class="input" type="text" placeholder="Search Movie"></input>
-
-                        </div>
-
-                        <div class="navbar-end">
-                            <div class="navbar-item">
-
-                                <div class="buttons">
-                                    {user.id ?
-                                        <Link to="/">
-                                            <button onClick={handleLogout} class="button is-primary mr-3" >
-
-                                                <strong>Log Out</strong>
-
-                                            </button>
-                                        </Link>
-                                        :
-                                        <div>
-                                            <Link to="signUp">
-                                                <button class="button is-primary mr-3" >
-
-                                                    <strong>Sign up</strong>
-
-                                                </button>
-                                            </Link>
-                                            <Link to="logIn">
-                                                <button class="button is-primary is-outlined" >
-
-                                                    <strong>Log in</strong>
-
-                                                </button>
-                                            </Link>
-
-                                        </div>
-                                    }
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </nav>
-            </div>
-            <Grid movies={moviesSearched}></Grid>
+                </ul>
+            </nav>
         </div>
+
     )
 }
 
-export default Navbar;
+export default Navbar

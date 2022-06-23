@@ -8,9 +8,16 @@ Movie.init({
     userId : {
         type : DataTypes.INTEGER
     },
+    movieId : {
+        type: DataTypes.INTEGER
+    },
     movie : {
-        type : DataTypes.STRING
+        type : DataTypes.JSON
         
+    },
+    isAdded : {
+        type : DataTypes.BOOLEAN,
+        defaultValue : false,
     }
 } ,  { sequelize, modelName: 'Movie' })
 

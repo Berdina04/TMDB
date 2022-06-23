@@ -9,9 +9,6 @@ const passport = require('passport')
 const routes = require('./routes/index')
 const db = require('./config/db')
 
-
-
-
 app.use(express.json())
 app.use(morgan('tiny'))
 
@@ -25,7 +22,6 @@ app.use('/api' , routes)
 
 
 
-db.sync({force: true }).then(() => {
+db.sync({force: false }).then(() => {
     app.listen(3001 , () => console.log(`Listening on ${3001}`))
 })
- 

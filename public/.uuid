@@ -1,0 +1,139 @@
+// function sockMerchant(n, ar) {
+//     // Write your code here
+//     let pairs = 0;
+//     let iterador = 0
+//     while(iterador < ar.length - 2 ){
+    
+//         for(let j = iterador + 1; j < ar.length; j++){
+//             console.log(ar)
+            
+          
+//             console.log('este es j' , j)
+//              console.log('este es iterador', iterador)
+//             if(j > ar.length ) break
+//             if(ar[iterador] == ar[j]) {
+//                 pairs++
+               
+//                 console.log('arr nuevo', ar)
+//             console.log('este es arr[0]', ar[iterador])
+//             console.log('este es arr[j]', ar[j])
+//                 ar.splice(j,1)
+//                 ar.splice(0,1)
+               
+                
+                
+//                 j = 0
+//             }
+           
+//         }
+//         iterador++
+        
+//     }
+//     //
+//     for(let i= 0 ; i < n ; i++) {
+//         for(let j=i+1; j < n;j++ ){
+//             console.log('recorrido' , ar[i] , ar[j])
+//             console.log(ar)
+//             if(ar[i] === ar[j]){
+//                 ar.splice(i,1)
+//                 ar.splice(j,1)
+//                 pairs++
+//                 break
+                
+//             }
+            
+        
+//         }
+//     }
+
+//     return pairs
+
+
+// /**
+//  * A container of integers that should support
+//  * addition, removal, and search for the median integer
+//  */
+//  class Container {
+//     constructor() {
+//       this.container = []
+//     }
+  
+//     /**
+//      * Adds the specified value to the container
+//      *
+//      * @param {number} value
+//      */
+//     add(value) {
+//       this.container.push(value)
+//       // TODO: implement this method
+//     }
+  
+//     /**
+//      * Attempts to delete one item of the specified value from the container
+//      *
+//      * @param {number} value
+//      * @return {boolean} true, if the value has been deleted, or
+//      *                   false, otherwise.
+//      */
+//     delete(value) {
+//       // TODO: implement this method
+//       if(this.container.indexOf(value) !== -1 ){
+//         let valueToDelete = this.container.indexOf(value)
+//         this.container.splice(valueToDelete, 1)
+//         return true
+//       }
+//       return false;
+//     }
+  
+//     /**
+//      * Finds the container's median integer value, which is
+//      * the middle integer when the all integers are sorted in order.
+//      * If the sorted array has an even length,
+//      * the leftmost integer between the two middle
+//      * integers should be considered as the median.
+//      *
+//      * @return {number} the median if the array is not empty, or
+//      * @throws {Error} a runtime exception, otherwise.
+//      */
+//     getMedian() {
+//       if(this.container.length >= 1) {
+//         for(let i = 0 ; i < this.container.length;i++){
+//           for(let j = i + 1; j <= this.container.length - 1;j++){
+//             if(this.container[i] > this.container[j]) {
+//               let pivot = this.container[i]
+//               console.log(pivot)
+             
+//               this.container[i] = this.container[j]
+//               this.container[j] = this.container[pivot]
+//                console.log(this.container)
+//             }
+//             else
+//           }
+//         }
+//         let middleContainer = Math.floor(this.container.length / 2)
+//               // console.log('Esta es la mitad del container => ' , middleContainer, this.container )
+//         if(this.container.length % 2 == 0 ) {
+//           middleContainer--
+//         }
+  
+//         let middleValue = this.container[middleContainer]
+        
+        
+//         if(this.container.length < 2 ) {
+          
+//           return this.container[0]
+//         }
+//         return middleValue
+//       }
+//       throw new Error();
+     
+  
+      
+//       // TODO: implement this method
+     
+//     }
+  
+//   }
+  
+//   module.exports = Container;
+  

@@ -1,22 +1,22 @@
-import axios from "axios";
-import React, {useContext} from "react";
-import useInput from "../hooks/useInput";
-import { useNavigate } from "react-router-dom"
-import { UserContext } from "../index";
+import axios from 'axios'
+import React, {useContext} from 'react'
+import useInput from '../hooks/useInput'
+import { useNavigate } from 'react-router-dom'
+import { UserContext } from '../index'
 
 const LogIn = () => {
     
-    const email = useInput("email");
-    const password = useInput("password");
-    const navigate = useNavigate();
+    const email = useInput('email')
+    const password = useInput('password')
+    const navigate = useNavigate()
     const {setUser} = useContext(UserContext)
-
+    const { favMovie , setFavMovie} = useContext(UserContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()
     
         axios
-            .post('/api/LogIn' , {
+            .post('/api/login' , {
                 email: email.value,
                 password: password.value,
             })
@@ -32,34 +32,36 @@ const LogIn = () => {
        
     }
 
+
     return (
-        <form onSubmit={handleSubmit}>
-            <div className="container my-4 section ">
-                <div class="field">
-                    <p class="control has-icons-left has-icons-right">
-                        <input class="input" type="email" placeholder="Email" {...email} />
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-envelope"></i>
+        <form className='section'  onSubmit={handleSubmit}>
+            <div>
+            <h1 class="title" style={{color:'white'}} >Please Log In!!</h1>
+                <div className="field">
+                    <p className="control has-icons-left has-icons-right">
+                        <input className="input" type="email" placeholder="Email" {...email} />
+                        <span className="icon is-small is-left">
+                            <i className="fas fa-envelope"></i>
                         </span>
-                        <span class="icon is-small is-right">
-                            <i class="fas fa-check"></i>
-                        </span>
-                    </p>
-                </div>
-                <div class="field">
-                    <p class="control has-icons-left">
-                        <input class="input" type="password" placeholder="Password"  {...password}/>
-                        <span class="icon is-small is-left">
-                            <i class="fas fa-lock"></i>
+                        <span className="icon is-small is-right">
+                            <i className="fas fa-check"></i>
                         </span>
                     </p>
                 </div>
-                <div class="field">
-                    <p class="control">
+                <div className="field">
+                    <p className="control has-icons-left">
+                        <input className="input" type="password" placeholder="Password"  {...password}/>
+                        <span className="icon is-small is-left">
+                            <i className="fas fa-lock"></i>
+                        </span>
+                    </p>
+                </div>
+                <div className="field">
+                    <p className="control">
                         
-                            <button type='submit' class="button is-success">
+                        <button type='submit' className="button is-success">
                                 Log In
-                            </button>
+                        </button>
                     </p>
                 </div>
             </div>
@@ -67,4 +69,4 @@ const LogIn = () => {
     )
 }
 
-export default LogIn;
+export default LogIn
