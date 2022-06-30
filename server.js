@@ -25,8 +25,9 @@ const PORT = process.env.PORT || 3001
 
 if(process.env.NODE_ENV === 'production') {
     //server static content
-    app.use(express.static(path.join(__dirname, "client/build")))
+    app.use(express.static(path.join(__dirname, "client/public")))
 }
+
 
 db.sync({force: true }).then(() => {
     app.listen(PORT , () => console.log(`Listening on ${PORT}`))
