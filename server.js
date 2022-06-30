@@ -24,10 +24,10 @@ app.use('/api' , routes)
 const PORT = process.env.PORT || 3001
 
 // app.use(express.static(path.join(__dirname, "client/build")))
-// if(process.env.NODE_ENV === 'production') {
-//     //server static content
-//     app.use(express.static(path.join(__dirname, "client/build")))
-// }
+if(process.env.NODE_ENV === 'production') {
+    //server static content
+    app.use(express.static(path.join(__dirname, "client/build")))
+}
 
 
 db.sync({force: true }).then(() => {
