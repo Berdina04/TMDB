@@ -35,7 +35,7 @@ const Grid = (props) => {
                     (movies?.length > 0
                         ? movies.map((data, i) => (
 
-                            <div className="column is-4 my-4 " key={i}>
+                            <div className="column is-2 my-2 " key={i}>
                                 <Card movie={data} />
                             </div>
                         ))
