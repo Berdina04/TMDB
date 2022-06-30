@@ -30,12 +30,12 @@ const Grid = (props) => {
 
         <div className='section'>
             {probando()}
-            <div className="columns is-multiline section ">
+            <div className="columns is-multiline ">
                 {
                     (movies?.length > 0
                         ? movies.map((data, i) => (
 
-                            <div className="column is-2 my-2 " key={i}>
+                            <div className="column is-4 my-4 " key={i}>
                                 <Card movie={data} />
                             </div>
                         ))
