@@ -28,6 +28,6 @@ if(process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, "client/build")))
 }
 
-db.sync({force: false }).then(() => {
+db.sync({force: true }).then(() => {
     app.listen(PORT , () => console.log(`Listening on ${PORT}`))
 })
