@@ -5,10 +5,18 @@ const Movie = require('../models/movie')
 const jwt = require('jsonwebtoken')
 const checkJWT = require('../middlewares/jwt')
 
-router.get('/me', (req, res) => {
-    if (!req.user) res.sendStatus(401)
-    res.send(req.user)
+// router.get('/me', (req, res) => {
+//     console.dir(req)
+//     if (!req.user) res.sendStatus(401)
+//     res.send(req.user)
+// })
+
+router.get('/me' , checkJWT , (req,res) => {
+    console.log('del me ' , req.user)
+    res.status(200).send(req.user)
+    
 })
+
 
 router.get('/addFavorites/:id', (req, res) => {
     
@@ -27,7 +35,7 @@ router.post('/register', (req, res , next) => {
 
 router.post('/login', (req, res) => {
     // check if the user is valid
-    console.dir(req.body)
+    // console.dir(req.body)
     const {email , password} = req.body
 
     //evaluate email
@@ -43,23 +51,23 @@ router.post('/login', (req, res) => {
         }
 
         if(!user.validPassword(password)){
-            console.log(password)
             return res.status(401).send("invalid credentials")
         }
 
         //generate the token+
         const token = jwt.sign({id: user.id , foo: "bar" , email: user.email}, 'plataforma5') //payload
 
-        return res.status(200).json({token})
+        return res.status(200).send({
+            userId : user.id,
+            email : email,
+            token : token,
+        })
 
     })
 
 })
 
 
-router.get('/private' , checkJWT , (req,res) => {
-    res.status(200).send('info privada')
-})
 
 
 router.post('/addFavorite', (req, res) => {

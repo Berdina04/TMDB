@@ -13,10 +13,11 @@ const Root = () => {
     const [movie, setMovie] = useState({})
     const [movies, setMovies] = useState([])
     const [favMovie, setFavMovie] = useState([])
+    const [token , setToken] = useState('')
 
     return (
         <BrowserRouter>
-            <UserContext.Provider value={{ user, setUser, favs, setFavs, movie, setMovie , movies, setMovies , favMovie, setFavMovie}}>
+            <UserContext.Provider value={{ user, setUser, favs, setFavs, movie, setMovie , movies, setMovies , favMovie, setFavMovie, token , setToken}}>
                 <App />
             </UserContext.Provider>
         </BrowserRouter>

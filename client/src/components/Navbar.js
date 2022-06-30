@@ -7,11 +7,11 @@ import { useEffect } from 'react'
 
 const Navbar = () => {
     const [value, setValue] = useState('')
-    const { movies , setMovies } = useContext(UserContext)
+    const { movies, setMovies } = useContext(UserContext)
     const navigate = useNavigate()
     const { user, setUser } = useContext(UserContext)
     const { favMovie } = useContext(UserContext)
-
+    const {setToken} = useContext(UserContext)
 
 
     const handleOnChange = (e) => {
@@ -21,7 +21,7 @@ const Navbar = () => {
 
 
     }
-    
+
     let moviesTemp
 
     useEffect(() => {
@@ -41,10 +41,11 @@ const Navbar = () => {
 
     const handleLogout = (e) => {
         e.preventDefault()
-        axios
-            .get('/api/logOut')
-            .then(setUser({}))
-            .then(navigate('/'))
+
+        setUser({})
+        setToken('')
+        localStorage.removeItem('token')
+        navigate('/')
     }
 
 
@@ -69,7 +70,7 @@ const Navbar = () => {
 
                     {user.id
                         ?
-                        <> 
+                        <>
                             <li>
                                 <Link to='/favs'>
                                     <a>

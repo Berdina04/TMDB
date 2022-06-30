@@ -18,20 +18,20 @@ const App = () => {
     const {favs} = useContext(UserContext)
     const { movie } = useContext(UserContext)
     const { favMovie , setFavMovie} = useContext(UserContext)
-    
-
-
-    
+    const {token} = useContext(UserContext)
 
     useEffect(() => {
         axios
-            .get('/api/me')
-            .then(res => res.data)
-            .then(user => {
-                setUser(user)
+            .get('/api/me' , {
+                headers: {
+                    authorization : localStorage.getItem('token')
+                }
             })
-
-    }, [])
+            .then(res =>  res.data)
+            .then(data => setUser(data))
+            .catch(err => console.error(err))
+            
+    }, [token])
 
     useEffect(() => {
         if(user.id) {
