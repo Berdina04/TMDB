@@ -85,7 +85,7 @@ const Card = ({ movie }) => {
                     <div className='text-overview'>{movie.overview}</div>
                     <br />
                     <Link to='/details'>
-                        <button className="button is-warning is-light is-medium is-rounded mb-2 is-4" onClick={() => seeDetails(movie)}>
+                        <button className="button is-info is-light is-medium is-rounded mb-2 is-4" onClick={() => seeDetails(movie)}>
                             Know More..
                         </button>
                     </Link>

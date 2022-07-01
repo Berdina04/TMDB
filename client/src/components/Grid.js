@@ -14,7 +14,7 @@ const Grid = (props) => {
 
 
     function probando() {
-        console.log(favMovie)
+        
         if (favMovie.length > 0) {
             favMovie.forEach(fav => {
                 movies.forEach(movie => {
@@ -30,7 +30,7 @@ const Grid = (props) => {
 
         <div className='section'>
             {probando()}
-            <div className="columns is-multiline ">
+            <div className="columns is-multiline section">
                 {
                     (movies?.length > 0
                         ? movies.map((data, i) => (
