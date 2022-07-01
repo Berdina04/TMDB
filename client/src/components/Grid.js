@@ -40,7 +40,6 @@ const Grid = (props) => {
                             </div>
                         ))
                         : null)
-
                 }
             </div>
         </div>
